@@ -7,6 +7,7 @@ public class Letter implements Parcelable {
 
     String letter;
     double x, y, z;
+    boolean found;
 
     public Letter(String letter, double x, double y, double z) {
         this.letter = letter;
@@ -20,6 +21,7 @@ public class Letter implements Parcelable {
         x = in.readDouble();
         y = in.readDouble();
         z = in.readDouble();
+        found = in.readInt() == 1;
     }
 
     public static final Creator<Letter> CREATOR = new Creator<Letter>() {
@@ -45,5 +47,6 @@ public class Letter implements Parcelable {
         dest.writeDouble(x);
         dest.writeDouble(y);
         dest.writeDouble(z);
+        dest.writeInt(found ? 1 : 0);
     }
 }

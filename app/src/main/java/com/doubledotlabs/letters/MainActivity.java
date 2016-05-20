@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        /*int numCams = Camera.getNumberOfCameras();
+        int numCams = Camera.getNumberOfCameras();
         if(numCams > 0){
             try{
                 camera = Camera.open(0);
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 return;
             }
             setCameraSize();
-        }*/
+        }
 
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
     }
