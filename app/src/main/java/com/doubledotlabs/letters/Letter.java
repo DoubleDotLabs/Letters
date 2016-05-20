@@ -6,21 +6,19 @@ import android.os.Parcelable;
 public class Letter implements Parcelable {
 
     String letter;
-    double x, y, z;
+    double x, y;
     boolean found;
 
-    public Letter(String letter, double x, double y, double z) {
+    public Letter(String letter, double x, double y) {
         this.letter = letter;
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     protected Letter(Parcel in) {
         letter = in.readString();
         x = in.readDouble();
         y = in.readDouble();
-        z = in.readDouble();
         found = in.readInt() == 1;
     }
 
@@ -46,7 +44,6 @@ public class Letter implements Parcelable {
         dest.writeString(letter);
         dest.writeDouble(x);
         dest.writeDouble(y);
-        dest.writeDouble(z);
         dest.writeInt(found ? 1 : 0);
     }
 }

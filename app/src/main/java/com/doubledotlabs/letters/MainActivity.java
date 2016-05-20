@@ -9,8 +9,12 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor sensor;
 
     ArrayList<Letter> letters;
+
+    float x, y, z;
+
+    final int TOUCH_RANGE = 80;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,10 +56,53 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         letters = new ArrayList<>();
 
         for (int i = 0; i < word.length(); i++) {
-            letters.add(new Letter(String.valueOf(word.charAt(i)), rand.nextDouble(), rand.nextDouble(), rand.nextDouble()));
+            letters.add(new Letter(String.valueOf(word.charAt(i)), rand.nextDouble(), rand.nextDouble()));
         }
 
         letterView.setLetters(letters);
+
+        letterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    float x = event.getX(), y = event.getY();
+
+                    Log.e("MainActivity", "x:" + x + " y:" + y);
+
+                    for (Letter letter : letters) {
+                        double thisX = (1 - (letter.x + MainActivity.this.x)) * letterView.getCanvasWidth() * Math.PI;
+                        double thisY = (letter.y + MainActivity.this.z) * letterView.getCanvasHeight() * Math.PI;
+
+                        if (Math.abs(x - thisX) < TOUCH_RANGE) {
+                            if (Math.abs(y - thisY) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY + letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY - letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            }
+                        } else if (Math.abs(x - thisX + letterView.getCanvasWidth()) < TOUCH_RANGE) {
+                            if (Math.abs(y - thisY) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY + letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY - letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            }
+                        } else if (Math.abs(x - thisX - letterView.getCanvasWidth()) < TOUCH_RANGE) {
+                            if (Math.abs(y - thisY) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY + letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            } else if (Math.abs(y - thisY - letterView.getCanvasHeight()) < TOUCH_RANGE) {
+                                letter.found = true;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -125,6 +176,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        letterView.update(event.values[0] / 360, event.values[1] / 360, event.values[2] / 360);
+        float x = event.values[0] / 360;
+        float y = event.values[1] / 360;
+        float z = event.values[2] / 360;
+
+        letterView.update((this.x + x) / 2, (this.y + y) / 2, (this.z + z) / 2);
+
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }

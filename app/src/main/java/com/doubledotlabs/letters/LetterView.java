@@ -6,9 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,50 +38,12 @@ public class LetterView extends AppCompatImageView {
         invalidate();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getRawX(), y = event.getRawY();
+    public double getCanvasWidth() {
+        return canvasWidth;
+    }
 
-        for (Letter letter : letters) {
-            double thisX = (1 - (letter.x + x)) * canvasWidth * 2, thisY = (letter.z + z) * canvasHeight;
-
-            if (Math.abs(x - thisX) < 5) {
-                if (Math.abs(y - thisY) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY + canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY - canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                }
-            } else if (Math.abs(x - thisX + canvasWidth) < 5) {
-                if (Math.abs(y - thisY) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY + canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY - canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                }
-            } else if (Math.abs(x - thisX - canvasWidth) < 5) {
-                if (Math.abs(y - thisY) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY + canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                } else if (Math.abs(y - thisY - canvasHeight) < 5) {
-                    letter.found = true;
-                    Toast.makeText(getContext(), letter.letter + " clicked", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-        return super.onTouchEvent(event);
+    public double getCanvasHeight() {
+        return canvasHeight;
     }
 
     @Override
@@ -99,11 +58,13 @@ public class LetterView extends AppCompatImageView {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(40);
+        paint.setTextSize(80);
 
         for (Letter letter : letters) {
-            double offsetX = (1 - (letter.x + x)) * canvasWidth * 2;
-            double offsetY = (letter.z + z) * canvasHeight * 2;
+            if (letter.found) continue;
+
+            double offsetX = (1 - (letter.x + x)) * canvasWidth * Math.PI;
+            double offsetY = (letter.y + z) * canvasHeight * Math.PI;
 
             canvas.drawText(letter.letter, (int) offsetX, (int) offsetY, paint);
             canvas.drawText(letter.letter, (int) offsetX - canvasWidth, (int) offsetY, paint);
