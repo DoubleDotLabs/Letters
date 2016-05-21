@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         letterView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                circle.animate().x(event.getX()).y(event.getY()).setInterpolator(new DecelerateInterpolator()).setDuration(150).start();
+
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     float x = event.getX(), y = event.getY();
 
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             if (Math.abs(y - thisY) < TOUCH_RANGE || Math.abs(y - thisY + letterView.getCanvasHeight()) < TOUCH_RANGE || Math.abs(y - thisY - letterView.getCanvasHeight()) < TOUCH_RANGE) {
                                 letter.found = true;
                                 foundLetters.add(letter);
-                                adapter.notifyDataSetChanged();
+                                adapter.notifyItemInserted(foundLetters.size() - 1);
                             }
                         }
                     }
@@ -99,15 +101,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setHasFixedSize(true);
 
-        adapter = new LettersAdapter(this, letters);
+        adapter = new LettersAdapter(this, foundLetters);
         recycler.setAdapter(adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.Callback() {
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                Collections.swap(adapter.letters, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                Collections.swap(foundLetters, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
             }
@@ -118,32 +120,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
             }
         }).attachToRecyclerView(recycler);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        ScaleAnimation animation;
-        switch(accuracy) {
-            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
-                animation = new ScaleAnimation((float) 1.0, (float) 1.2, (float) 1.0, (float) 1.2);
-                break;
-            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
-                animation = new ScaleAnimation((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
-                break;
-            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
-                animation = new ScaleAnimation((float) 1.0, (float) 0.8, (float) 1.0, (float) 0.8);
-                break;
-            default:
-                return;
-        }
-
-        animation.setInterpolator(new DecelerateInterpolator());
-        animation.setDuration(150);
-
-        circle.startAnimation(animation);
     }
 
     @Override

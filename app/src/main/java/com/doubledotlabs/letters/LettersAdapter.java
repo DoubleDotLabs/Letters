@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(LettersAdapter.ViewHolder holder, int position) {
+        Toast.makeText(activity, letters.get(position).letter, Toast.LENGTH_SHORT).show();
         holder.v.setLetter(letters.get(position).letter);
     }
 

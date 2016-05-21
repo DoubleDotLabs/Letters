@@ -35,9 +35,9 @@ public class SquareLetterView extends AppCompatImageView {
         super(context, attrs, defStyleAttr);
 
         paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.parseColor("#1DE9B6"));
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(20);
+        paint.setTextSize(60);
     }
 
     public void setLetter(String letter) {
