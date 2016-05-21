@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class LetterView extends AppCompatImageView {
 
-    private double x, y, z;
+    private double x, y;
     private int canvasWidth, canvasHeight;
     private ArrayList<Letter> letters;
 
@@ -31,10 +31,9 @@ public class LetterView extends AppCompatImageView {
         this.letters = letters;
     }
 
-    public void update(float x, float y, float z) {
+    public void update(float x, float y) {
         this.x = x;
         this.y = y;
-        this.z = z;
         invalidate();
     }
 
@@ -64,7 +63,7 @@ public class LetterView extends AppCompatImageView {
             if (letter.found) continue;
 
             double offsetX = (1 - (letter.x + x)) * canvasWidth * Math.PI;
-            double offsetY = (letter.y + z) * canvasHeight * Math.PI;
+            double offsetY = (letter.y + y) * canvasHeight * Math.PI;
 
             canvas.drawText(letter.letter, (int) offsetX, (int) offsetY, paint);
             canvas.drawText(letter.letter, (int) offsetX - canvasWidth, (int) offsetY, paint);
@@ -76,7 +75,5 @@ public class LetterView extends AppCompatImageView {
             canvas.drawText(letter.letter, (int) offsetX - canvasWidth, (int) offsetY + canvasHeight, paint);
             canvas.drawText(letter.letter, (int) offsetX + canvasWidth, (int) offsetY + canvasHeight, paint);
         }
-
-        canvas.rotate((float) y * 3600, canvas.getWidth() / 2, canvas.getHeight() / 2);
     }
 }

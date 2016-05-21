@@ -2,6 +2,7 @@ package com.doubledotlabs.letters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,7 +10,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +32,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    AppCompatDialog dialog;
+    CustomViewPager tutorialPager;
+
     ImagePreview preview;
     Camera camera;
     LetterView letterView;
@@ -42,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     ArrayList<Letter> letters;
     ArrayList<Letter> foundLetters;
 
-    float x, y, z;
+    float x, y;
 
     final int TOUCH_RANGE = 80;
 
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         if (letter.found) continue;
 
                         double thisX = (1 - (letter.x + MainActivity.this.x)) * letterView.getCanvasWidth() * Math.PI;
-                        double thisY = (letter.y + MainActivity.this.z) * letterView.getCanvasHeight() * Math.PI;
+                        double thisY = (letter.y + MainActivity.this.y) * letterView.getCanvasHeight() * Math.PI;
 
                         if (Math.abs(x - thisX) < TOUCH_RANGE || Math.abs(x - thisX + letterView.getCanvasWidth()) < TOUCH_RANGE || Math.abs(x - thisX - letterView.getCanvasWidth()) < TOUCH_RANGE) {
                             if (Math.abs(y - thisY) < TOUCH_RANGE || Math.abs(y - thisY + letterView.getCanvasHeight()) < TOUCH_RANGE || Math.abs(y - thisY - letterView.getCanvasHeight()) < TOUCH_RANGE) {
@@ -124,8 +132,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }).attachToRecyclerView(recycler);
 
-
-        //Dialog dialog = new Dialog(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        new TutorialDialog().show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -135,14 +142,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         float x = event.values[0] / 360;
-        float y = event.values[1] / 360;
-        float z = event.values[2] / 360;
+        float y = event.values[2] / 360;
 
-        letterView.update((this.x + x) / 2, (this.y + y) / 2, (this.z + z) / 2);
+        letterView.update((this.x + x) / 2, (this.y + y) / 2);
 
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     public void setCameraSize() {
@@ -204,6 +209,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             camera.release();
             camera = null;
         }
+
+        if (dialog.isShowing()) dialog.dismiss();
 
         super.onPause();
 

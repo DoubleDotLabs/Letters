@@ -2,37 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#60000000"
     android:gravity="center_vertical">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="196dp"
-        android:layout_height="196dp"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/imageView"
-        android:layout_margin="56dp" />
+        android:layout_margin="16dp"
+        android:scaleType="fitCenter" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="16dp"
         android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/title"
             android:textSize="24sp"
-            android:textColor="#fff"
+            android:textColor="#DE000000"
             android:layout_margin="8dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/content"
             android:layout_margin="8dp"
-            android:textColor="#B3FFFFFF" />
+            android:textColor="#8A000000" />
     </LinearLayout>
 </LinearLayout>

@@ -34,12 +34,12 @@ public class TutorialPagerAdapter extends FragmentStatePagerAdapter {
             f.setArguments(args);
             return f;
         } else {
-            return null;
+            return new Fragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }
