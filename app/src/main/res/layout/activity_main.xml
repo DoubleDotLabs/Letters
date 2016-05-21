@@ -27,6 +27,9 @@
         android:layout_height="match_parent"
         android:id="@+id/recycler"
         android:layout_gravity="start"
-        android:background="@drawable/gradient" />
+        android:background="@drawable/gradient"
+        android:elevation="8dp"
+        android:paddingTop="24dp"
+        android:clipToPadding="false" />
 
 </FrameLayout>
