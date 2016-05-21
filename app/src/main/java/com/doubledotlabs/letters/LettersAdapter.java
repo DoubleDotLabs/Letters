@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,13 +26,13 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
 
     @Override
     public LettersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder((SquareLetterView) ((LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_letter, null));
+        return new ViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_letter, null));
     }
 
     @Override
     public void onBindViewHolder(LettersAdapter.ViewHolder holder, int position) {
         Toast.makeText(activity, letters.get(position).letter, Toast.LENGTH_SHORT).show();
-        holder.v.setLetter(letters.get(position).letter);
+        ((TextView) holder.v.findViewById(R.id.letter)).setText(letters.get(position).letter);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public SquareLetterView v;
-        public ViewHolder(SquareLetterView v) {
+        public View v;
+        public ViewHolder(View v) {
             super(v);
             this.v = v;
         }

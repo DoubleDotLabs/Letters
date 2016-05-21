@@ -1,5 +1,6 @@
 package com.doubledotlabs.letters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Sensor;
@@ -11,14 +12,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -85,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     float x = event.getX(), y = event.getY();
 
                     for (Letter letter : letters) {
+                        if (letter.found) continue;
+
                         double thisX = (1 - (letter.x + MainActivity.this.x)) * letterView.getCanvasWidth() * Math.PI;
                         double thisY = (letter.y + MainActivity.this.z) * letterView.getCanvasHeight() * Math.PI;
 
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
-        recycler.setHasFixedSize(true);
 
         adapter = new LettersAdapter(this, foundLetters);
         recycler.setAdapter(adapter);
@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
             }
         }).attachToRecyclerView(recycler);
+
+
+        //Dialog dialog = new Dialog(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
     }
 
     @Override

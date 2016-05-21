@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Letters</string>
+
+    <string name="tutorial_title_one">Motion</string>
+    <string name="tutorial_content_one">Look around and tap all of the letters.</string>
+    <string name="tutorial_title_two">Text</string>
+    <string name="tutorial_content_two">Re-arrange them to form our name to win.</string>
 </resources>

@@ -5,7 +5,7 @@
     android:background="#60000000"
     android:gravity="center_vertical">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="196dp"
         android:layout_height="196dp"
         android:id="@+id/imageView"
