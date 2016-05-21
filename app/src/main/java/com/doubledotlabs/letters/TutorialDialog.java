@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 
 public class TutorialDialog extends DialogFragment {
 
+    ViewPager viewPager;
+    TutorialPagerAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_viewpager, container);
+        View v = inflater.inflate(R.layout.item_viewpager, container);
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        TutorialPagerAdapter adapter = new TutorialPagerAdapter(getActivity(), getChildFragmentManager());
+        viewPager = (ViewPager) v.findViewById(R.id.viewPager);
+        adapter = new TutorialPagerAdapter(getActivity(), getChildFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -33,6 +36,15 @@ public class TutorialDialog extends DialogFragment {
             }
         });
 
-        return view;
+        v.findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewPager.getCurrentItem() < adapter.getCount()) {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+                }
+            }
+        });
+
+        return v;
     }
 }

@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             camera = null;
         }
 
-        if (dialog.isShowing()) dialog.dismiss();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
 
         super.onPause();
 
