@@ -15,4 +15,18 @@
         android:elevation="8dp"
         android:id="@+id/letterView"/>
 
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:id="@+id/circle"
+        android:layout_gravity="center"
+        android:src="@drawable/circle" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:id="@+id/recycler"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient" />
+
 </FrameLayout>

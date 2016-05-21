@@ -1,16 +1,21 @@
 package com.doubledotlabs.letters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import java.util.ArrayList;
 
 public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHolder> {
 
-    private Activity activity;
-    private ArrayList<Letter> letters;
+    Activity activity;
+    public ArrayList<Letter> letters;
 
     public LettersAdapter(Activity activity, ArrayList<Letter> letters) {
         this.activity = activity;
@@ -19,12 +24,12 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
 
     @Override
     public LettersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        return new ViewHolder((SquareLetterView) ((LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_letter, null));
     }
 
     @Override
     public void onBindViewHolder(LettersAdapter.ViewHolder holder, int position) {
-
+        holder.v.setLetter(letters.get(position).letter);
     }
 
     @Override
@@ -33,8 +38,8 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public View v;
-        public ViewHolder(View v) {
+        public SquareLetterView v;
+        public ViewHolder(SquareLetterView v) {
             super(v);
             this.v = v;
         }
