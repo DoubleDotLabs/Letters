@@ -33,7 +33,6 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     AppCompatDialog dialog;
-    CustomViewPager tutorialPager;
 
     ImagePreview preview;
     Camera camera;
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     ArrayList<Letter> letters;
     ArrayList<Letter> foundLetters;
+    String word;
 
     float x, y;
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         Random rand = new Random();
-        String word = "DoubleDotLabs";
+        word = getString(R.string.word);
         letters = new ArrayList<>();
 
         for (int i = 0; i < word.length(); i++) {
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 letter.found = true;
                                 foundLetters.add(letter);
                                 adapter.notifyItemInserted(foundLetters.size() - 1);
+                                onLetterChanged();
                             }
                         }
                     }
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 Collections.swap(foundLetters, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                onLetterChanged();
                 return true;
             }
 
@@ -133,6 +135,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }).attachToRecyclerView(recycler);
 
         new TutorialDialog().show(getSupportFragmentManager(), null);
+    }
+
+    public void onLetterChanged() {
+        String word = "";
+        for (Letter letter : foundLetters) {
+            word += letter.letter;
+        }
+
+        if (word.matches(this.word)) {
+            new FinishedDialog().show(getSupportFragmentManager(), null);
+        }
     }
 
     @Override

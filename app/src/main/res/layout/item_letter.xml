@@ -8,9 +8,10 @@
         android:layout_height="64dp"
         android:layout_margin="4dp"
         android:layout_gravity="center"
-        android:textColor="#1DE9B6"
+        android:textColor="@color/colorAccent"
         android:id="@+id/letter"
         android:gravity="center"
-        android:background="@drawable/border"/>
+        android:background="@drawable/border"
+        android:textSize="24sp" />
 
 </FrameLayout>

@@ -14,7 +14,7 @@ public class TutorialDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.item_viewpager, container);
+        View v = inflater.inflate(R.layout.dialog_viewpager, container);
 
         viewPager = (ViewPager) v.findViewById(R.id.viewPager);
         adapter = new TutorialPagerAdapter(getActivity(), getChildFragmentManager());

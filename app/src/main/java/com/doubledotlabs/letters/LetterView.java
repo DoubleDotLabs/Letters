@@ -2,8 +2,8 @@ package com.doubledotlabs.letters;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
@@ -14,17 +14,33 @@ public class LetterView extends AppCompatImageView {
     private double x, y;
     private int canvasWidth, canvasHeight;
     private ArrayList<Letter> letters;
+    private Paint paint;
 
     public LetterView(Context context) {
         super(context);
+
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.textColorSecondaryInverse));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(80);
     }
 
     public LetterView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.textColorSecondaryInverse));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(80);
     }
 
     public LetterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.textColorSecondaryInverse));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(80);
     }
 
     public void setLetters(ArrayList<Letter> letters) {
@@ -53,11 +69,6 @@ public class LetterView extends AppCompatImageView {
     private void drawLetters(Canvas canvas) {
         canvasWidth = canvas.getWidth();
         canvasHeight = canvas.getHeight();
-
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(80);
 
         for (Letter letter : letters) {
             if (letter.found) continue;
