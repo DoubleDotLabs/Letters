@@ -1,4 +1,4 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,9 @@ import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+
+import com.doubledotlabs.letters.data.Letter;
+import com.doubledotlabs.letters.R;
 
 import java.util.ArrayList;
 

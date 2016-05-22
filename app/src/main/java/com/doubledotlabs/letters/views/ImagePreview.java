@@ -1,4 +1,4 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.views;
 
 import android.content.Context;
 import android.hardware.Camera;

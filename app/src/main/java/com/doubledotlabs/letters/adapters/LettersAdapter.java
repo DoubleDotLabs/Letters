@@ -1,16 +1,15 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.doubledotlabs.letters.R;
+import com.doubledotlabs.letters.data.Letter;
 
 import java.util.ArrayList;
 

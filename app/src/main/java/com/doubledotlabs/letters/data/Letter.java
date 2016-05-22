@@ -1,13 +1,13 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Letter implements Parcelable {
 
-    String letter;
-    double x, y;
-    boolean found;
+    public String letter;
+    public double x, y;
+    public boolean found;
 
     public Letter(String letter, double x, double y) {
         this.letter = letter;

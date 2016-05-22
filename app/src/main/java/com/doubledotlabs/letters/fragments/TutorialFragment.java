@@ -1,4 +1,4 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.doubledotlabs.letters.R;
 
 public class TutorialFragment extends Fragment {
 

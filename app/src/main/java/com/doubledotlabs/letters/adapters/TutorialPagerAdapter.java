@@ -1,10 +1,13 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.adapters;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.doubledotlabs.letters.R;
+import com.doubledotlabs.letters.fragments.TutorialFragment;
 
 public class TutorialPagerAdapter extends FragmentStatePagerAdapter {
 

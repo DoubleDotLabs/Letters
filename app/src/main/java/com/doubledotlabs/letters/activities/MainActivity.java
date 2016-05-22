@@ -1,8 +1,6 @@
-package com.doubledotlabs.letters;
+package com.doubledotlabs.letters.activities;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,9 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatImageView;
@@ -24,14 +19,22 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+
+import com.doubledotlabs.letters.data.Letter;
+import com.doubledotlabs.letters.adapters.LettersAdapter;
+import com.doubledotlabs.letters.R;
+import com.doubledotlabs.letters.dialogs.FinishedDialog;
+import com.doubledotlabs.letters.dialogs.TutorialDialog;
+import com.doubledotlabs.letters.utils.Orientation;
+import com.doubledotlabs.letters.views.ImagePreview;
+import com.doubledotlabs.letters.views.LetterView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity {
 
     AppCompatDialog dialog;
 
@@ -44,15 +47,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     AppCompatImageView circle;
     LettersAdapter adapter;
 
-    SensorManager sensorManager;
-    Sensor magnetometer;
-    Sensor accelerometer;
-
-    private float[] magnetometerValue = new float[3];
-    private float[] accelerometerValue = new float[3];
-
-    private float[] sensorValues = new float[9];
-    private float[] orientation = new float[3];
+    Orientation orientation;
 
     ArrayList<Letter> letters;
     ArrayList<Letter> foundLetters;
@@ -76,9 +71,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         fl.addView(preview, 0);
         preview.setKeepScreenOn(true);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        orientation = new Orientation(this, new Orientation.OrientationListener() {
+            @Override
+            public void onOrientation(float x, float y) {
+                letterView.update(x, y);
+            }
+
+            @Override
+            public void onAccuracyChanged(int accuracy) {
+            }
+        });
 
         Random rand = new Random();
         word = getString(R.string.word);
@@ -157,33 +159,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == accelerometer) {
-            accelerometerValue = event.values;
-        } else if (event.sensor == magnetometer) {
-            magnetometerValue = event.values;
-        }
-
-        if (!SensorManager.getRotationMatrix(sensorValues, null, accelerometerValue, magnetometerValue)) {
-            Toast.makeText(this, ":(", Toast.LENGTH_SHORT).show();
-        }
-
-        orientation = SensorManager.getOrientation(sensorValues, orientation);
-
-        float x = orientation[0] / 360;
-        float y = orientation[2] / 360;
-
-        letterView.update((this.x + x) / 2, (this.y + y) / 2);
-
-        this.x = x;
-        this.y = y;
-    }
-
     public void setCameraSize() {
         List<Camera.Size> previewSizes = camera.getParameters().getSupportedPreviewSizes();
         boolean error = true;
@@ -232,8 +207,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             setCameraSize();
         }
 
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        orientation.onResume();
     }
 
     @Override
@@ -247,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (dialog != null && dialog.isShowing()) dialog.dismiss();
 
-        super.onPause();
+        orientation.onPause();
 
-        sensorManager.unregisterListener(this);
+        super.onPause();
     }
 }

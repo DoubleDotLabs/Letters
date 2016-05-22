@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:id="@+id/surfaceView" />
 
-    <com.doubledotlabs.letters.LetterView
+    <com.doubledotlabs.letters.views.LetterView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="8dp"
