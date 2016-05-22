@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.doubledotlabs.letters.R;
 import com.doubledotlabs.letters.data.Letter;
@@ -30,7 +29,6 @@ public class LettersAdapter extends RecyclerView.Adapter<LettersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(LettersAdapter.ViewHolder holder, int position) {
-        Toast.makeText(activity, letters.get(position).letter, Toast.LENGTH_SHORT).show();
         ((TextView) holder.v.findViewById(R.id.letter)).setText(letters.get(position).letter);
     }
 

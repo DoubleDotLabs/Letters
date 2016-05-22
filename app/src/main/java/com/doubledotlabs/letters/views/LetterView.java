@@ -50,18 +50,18 @@ public class LetterView extends AppCompatImageView {
         this.letters = letters;
     }
 
-    public void update(float x, float y) {
-        this.x = x;
-        this.y = y;
-        invalidate();
-    }
-
     public double getCanvasWidth() {
         return canvasWidth;
     }
 
     public double getCanvasHeight() {
         return canvasHeight;
+    }
+
+    public void update(float x, float y) {
+        this.x = x;
+        this.y = y;
+        invalidate();
     }
 
     @Override

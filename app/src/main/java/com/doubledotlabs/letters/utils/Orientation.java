@@ -7,6 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.Arrays;
+
 public class Orientation implements SensorEventListener {
 
     public interface OrientationListener {
@@ -29,8 +31,8 @@ public class Orientation implements SensorEventListener {
     }
 
     public void onResume() {
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     public void onPause() {
@@ -43,10 +45,10 @@ public class Orientation implements SensorEventListener {
 
         switch (event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
-                accelerometerVals = event.values.clone();
+                accelerometerVals = Arrays.copyOf(event.values, event.values.length);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
-                magneticVals = event.values.clone();
+                magneticVals = Arrays.copyOf(event.values, event.values.length);
                 break;
         }
 
