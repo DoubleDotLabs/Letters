@@ -24,6 +24,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +45,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     LettersAdapter adapter;
 
     SensorManager sensorManager;
-    Sensor sensor;
+    Sensor magnetometer;
+    Sensor accelerometer;
+
+    private float[] magnetometerValue = new float[3];
+    private float[] accelerometerValue = new float[3];
+
+    private float[] sensorValues = new float[9];
+    private float[] orientation = new float[3];
 
     ArrayList<Letter> letters;
     ArrayList<Letter> foundLetters;
@@ -69,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         preview.setKeepScreenOn(true);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         Random rand = new Random();
         word = getString(R.string.word);
@@ -154,8 +163,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float x = event.values[0] / 360;
-        float y = event.values[2] / 360;
+        if (event.sensor == accelerometer) {
+            accelerometerValue = event.values;
+        } else if (event.sensor == magnetometer) {
+            magnetometerValue = event.values;
+        }
+
+        if (!SensorManager.getRotationMatrix(sensorValues, null, accelerometerValue, magnetometerValue)) {
+            Toast.makeText(this, ":(", Toast.LENGTH_SHORT).show();
+        }
+
+        orientation = SensorManager.getOrientation(sensorValues, orientation);
+
+        float x = orientation[0] / 360;
+        float y = orientation[2] / 360;
 
         letterView.update((this.x + x) / 2, (this.y + y) / 2);
 
@@ -211,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             setCameraSize();
         }
 
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
